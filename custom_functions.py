@@ -65,11 +65,11 @@ def plots(data, lags=None):
 def draw_boxplots(monthly_df):
     fig, axes = plt.subplots(1, 2, figsize=(20,7), dpi= 80)
     sns.boxplot(x=monthly_df['date'].dt.year, y='sales', data=monthly_df, ax=axes[0])
-    sns.boxplot(x=monthly_df['date'].dt.month, y='sales', data=monthly_df.loc[~df.date.isin([2013, 2018]), :])
+    sns.boxplot(x=monthly_df['date'].dt.month, y='sales', data=monthly_df.loc[~monthly_df.date.isin([2013, 2018]), :])
 
     # Set Title
-    axes[0].set_title('Year-wise Box Plot\n(The Trend)', fontsize=18)
-    axes[1].set_title('Month-wise Box Plot\n(The Seasonality)', fontsize=18)
+    axes[0].set_title('Year-wise Box Plot\n(Trend)', fontsize=18)
+    axes[1].set_title('Month-wise Box Plot\n(Seasonality)', fontsize=18)
     plt.show()
 
 #For calculating missing values
