@@ -86,7 +86,7 @@ def adfuller_test(sales):
         print(label+' : '+str(value))
         
     if result[1] <= 0.05:
-        print("Strong evidence against the null hypothesis(Ho). Therefore, reject the null hypothesis and accept alternate hypothesis. Time series has no unit root and is stationary.")
+        print("Strong evidence against the null hypothesis. Therefore, reject the null hypothesis and accept alternate hypothesis. Time series has no unit root and is stationary.")
     else:
         print("Weak evidence against null hypothesis. Therefore, accept null hypothesis and reject alternate hypothesis. Time series has a unit root, indicating it is non-stationary.")
 
@@ -99,7 +99,7 @@ def kpss_test(sales):
     if result[1] <= 0.05:
         print("Weak evidence against null hypothesis. Therefore, accept null hypothesis and reject alternate hypothesis. Time series has a unit root, indicating it is non-stationary.")
     else:
-        print("Strong evidence against the null hypothesis(Ho). Therefore, reject the null hypothesis and accept alternate hypothesis. Data has no unit root and is stationary.")
+        print("Strong evidence against the null hypothesis. Therefore, reject the null hypothesis and accept alternate hypothesis. Data has no unit root and is stationary.")
        
   
 def remove_outliers_iqr(data):
