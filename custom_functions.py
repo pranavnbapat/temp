@@ -91,7 +91,7 @@ def adfuller_test(sales):
         print("Weak evidence against null hypothesis. Therefore, accept null hypothesis and reject alternate hypothesis. Time series has a unit root, indicating it is non-stationary.")
 
 def kpss_test(sales):
-    result=kpss(sales, regression='c', nlags="auto")
+    result=kpss(sales, regression='c')
     labels = ['KPSS Test Statistic', 'p-value', '#Lags Used', 'Number of Observations Used']
     for value, label in zip(result,labels):
         print(label+' : '+str(value))
