@@ -1,3 +1,16 @@
+import pandas as pd
+import numpy as np
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+plt.style.use('fivethirtyeight')
+import matplotlib.dates as mdates
+%matplotlib inline
+
+import datetime
+
+import statsmodels.tsa.api as smt
+
 def time_plot(data, x_col, y_col, title):
     fig, ax = plt.subplots(figsize=(15,5))
     sns.lineplot(x_col, y_col, data=data, ax=ax, color='mediumblue', label='Total Sales')
