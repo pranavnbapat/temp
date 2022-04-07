@@ -56,4 +56,8 @@ def plots(data, lags=None):
     plt.tight_layout()
 
 
-
+#For calculating missing values
+def calc_percent_NAs(df):
+    nans = pd.DataFrame(df.isnull().sum().sort_values(ascending=False)/len(df), columns=['percent']) 
+    idx = nans['percent'] > 0
+    return nans[idx]
