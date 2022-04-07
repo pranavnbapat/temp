@@ -10,6 +10,11 @@ import datetime
 
 import statsmodels.tsa.api as smt
 
+from statsmodels.tsa.stattools import adfuller, kpss
+
+from sklearn.metrics import mean_squared_error
+
+
 def time_plot(data, x_col, y_col, title):
     fig, ax = plt.subplots(figsize=(15,5))
     sns.lineplot(x_col, y_col, data=data, ax=ax, color='mediumblue', label='Total Sales')
@@ -61,3 +66,75 @@ def calc_percent_NAs(df):
     nans = pd.DataFrame(df.isnull().sum().sort_values(ascending=False)/len(df), columns=['percent']) 
     idx = nans['percent'] > 0
     return nans[idx]
+
+
+def adfuller_test(sales):
+    result=adfuller(sales)
+    labels = ['ADF Test Statistic','p-value','#Lags Used','Number of Observations Used']
+    for value,label in zip(result,labels):
+        print(label+' : '+str(value))
+        
+    if result[1] <= 0.05:
+        print("Strong evidence against the null hypothesis(Ho). Therefore, reject the null hypothesis and accept alternate hypothesis. Time series has no unit root and is stationary.")
+    else:
+        print("Weak evidence against null hypothesis. Therefore, accept null hypothesis and reject alternate hypothesis. Time series has a unit root, indicating it is non-stationary.")
+
+def kpss_test(sales):
+    result=kpss(sales, regression='c', nlags="auto")
+    labels = ['KPSS Test Statistic', 'p-value', '#Lags Used', 'Number of Observations Used']
+    for value, label in zip(result,labels):
+        print(label+' : '+str(value))
+        
+    if result[1] <= 0.05:
+        print("Weak evidence against null hypothesis. Therefore, accept null hypothesis and reject alternate hypothesis. Time series has a unit root, indicating it is non-stationary.")
+    else:
+        print("Strong evidence against the null hypothesis(Ho). Therefore, reject the null hypothesis and accept alternate hypothesis. Data has no unit root and is stationary.")
+       
+  
+def remove_outliers_iqr(data):
+    df = data
+    df.set_index('date', inplace=True)
+
+    q25, q75 = np.percentile(df['sales'], 25), np.percentile(df['sales'], 75)
+    iqr = q75 - q25
+    print('Percentiles: 25th=%.3f, 75th=%.3f, IQR=%.3f' % (q25, q75, iqr))
+    # calculate the outlier cutoff
+    cut_off = iqr * 1.5
+    lower, upper = q25 - cut_off, q75 + cut_off
+    # identify outliers
+    outliers = [x for x in df['sales'] if x < lower or x > upper]
+    print('Identified outliers: %d' % len(outliers))
+    # remove outliers
+    outliers_removed = [x for x in df['sales'] if x >= lower and x <= upper]
+    print('Non-outlier observations: %d' % len(outliers_removed))
+    
+    df = df[~df['sales'].isin(outliers)]
+    df = df.reset_index()
+    return df
+
+def remove_outliers_quantile(data):
+    df = data
+    df.set_index('date', inplace=True)
+    y = df['sales']
+    removed_outliers = y.between(y.quantile(.05), y.quantile(.95))
+    index_names = df[~removed_outliers].index # INVERT removed_outliers!!
+    df.drop(index_names, inplace=True)
+    df = df.reset_index()
+    return df
+
+def remove_outliers_std(data):
+    df = data
+    data_mean, data_std = np.mean(df['sales']), np.std(df['sales'])
+    # identify outliers
+    cut_off = data_std * 3
+    lower, upper = data_mean - cut_off, data_mean + cut_off
+    # identify outliers
+    outliers = [x for x in df['sales'] if x < lower or x > upper]
+    print('Identified outliers: %d' % len(outliers))
+    # remove outliers
+    outliers_removed = [x for x in df['sales'] if x >= lower and x <= upper]
+    print('Non-outlier observations: %d' % len(outliers_removed))
+    
+    df = df[~df['sales'].isin(outliers)]
+    df = df.reset_index()
+    return df
