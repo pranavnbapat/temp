@@ -5,7 +5,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
 import matplotlib.dates as mdates
-%matplotlib inline
 
 import datetime
 
