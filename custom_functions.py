@@ -29,3 +29,11 @@ def monthly_sales(data):
     monthly_data = monthly_data.groupby('date')['sales'].sum().reset_index()
     monthly_data.date = pd.to_datetime(monthly_data.date)
     return monthly_data
+
+#Converts non-stationary data to stationary data and saves by differencing
+def get_diff(data):
+    data['sales_diff'] = data.sales.diff()
+    data = data.dropna()
+    
+    data.to_csv('/content/temp/stationary_df.csv')
+    return data
