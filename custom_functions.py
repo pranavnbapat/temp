@@ -36,8 +36,8 @@ def monthly_sales(data):
     return monthly_data
 
 #Converts non-stationary data to stationary data and saves by differencing
-def get_diff(data):
-    data['sales_diff'] = data.sales.diff(12)
+def get_diff(data, diff):
+    data['sales_diff'] = data.sales.diff(diff)
     data = data.dropna()
     
     data.to_csv('/content/temp/stationary_df.csv')
