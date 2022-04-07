@@ -37,3 +37,23 @@ def get_diff(data):
     
     data.to_csv('/content/temp/stationary_df.csv')
     return data
+
+def plots(data, lags=None):
+    
+    # Convert dataframe to datetime index
+    dt_data = data.set_index('date').drop('sales', axis=1)
+    dt_data.dropna(axis=0)
+    
+    layout = (1, 3)
+    raw  = plt.subplot2grid(layout, (0, 0))
+    acf  = plt.subplot2grid(layout, (0, 1))
+    pacf = plt.subplot2grid(layout, (0, 2))
+    
+    dt_data.plot(ax=raw, figsize=(12, 5), color='mediumblue')
+    smt.graphics.plot_acf(dt_data, lags=lags, ax=acf, color='mediumblue')
+    smt.graphics.plot_pacf(dt_data, lags=lags, ax=pacf, color='mediumblue')
+    sns.despine()
+    plt.tight_layout()
+
+
+
