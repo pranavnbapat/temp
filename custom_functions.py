@@ -62,7 +62,7 @@ def plots(data, lags=None):
 
 
 #Draw boxplots
-def draw_boxplots():
+def draw_boxplots(monthly_df):
     fig, axes = plt.subplots(1, 2, figsize=(20,7), dpi= 80)
     sns.boxplot(x=monthly_df['date'].dt.year, y='sales', data=monthly_df, ax=axes[0])
     sns.boxplot(x=monthly_df['date'].dt.month, y='sales', data=monthly_df.loc[~df.date.isin([2013, 2018]), :])
